@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
-import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
@@ -11,19 +10,29 @@ const routes: Array<RouteConfig> = [
     children: [
       {
         path: '',
-        name: 'Home',
+        name: 'home',
         component: () => import(/* webpackChunkName: "home" */ '@/views/home/index.vue')
       },
       {
         path: '/login',
-        name: 'Login',
-        component: () => import(/* webpackChunkName: "login" */ '@/views/login/index.vue')
+        name: 'login',
+        component: () => import(/* webpackChunkName: "login" */ '@/views/login/index.vue'),
+        props: { isLogin: true },
+        meta: { noAuth: true }
+      },
+      {
+        path: '/register',
+        name: 'register',
+        component: () => import(/* webpackChunkName: "register" */ '@/views/login/index.vue'),
+        props: { isLogin: false },
+        meta: { noAuth: true }
       }
     ]
   }
 ]
 
 const router = new VueRouter({
+  mode: 'history',
   routes
 })
 
