@@ -15,6 +15,10 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     '@typescript-eslint/member-delimiter-style': 'off',
-    'operator-linebreak': 'off'
+    'operator-linebreak': 'off',
+    'lines-between-class-members': 'off',
+    semi: 'off',
+    'object-curly-spacing': 'off',
+    indent: 'off'
   }
 }

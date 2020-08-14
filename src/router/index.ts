@@ -16,14 +16,14 @@ const routes: Array<RouteConfig> = [
       {
         path: '/login',
         name: 'login',
-        component: () => import(/* webpackChunkName: "login" */ '@/views/login/index.vue'),
+        component: () => import(/* webpackChunkName: "login" */ '@/views/login/index.tsx'),
         props: { isLogin: true },
         meta: { noAuth: true }
       },
       {
         path: '/register',
         name: 'register',
-        component: () => import(/* webpackChunkName: "register" */ '@/views/login/index.vue'),
+        component: () => import(/* webpackChunkName: "register" */ '@/views/login/index.tsx'),
         props: { isLogin: false },
         meta: { noAuth: true }
       }
