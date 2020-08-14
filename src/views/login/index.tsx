@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import { Mutation } from 'vuex-class';
+import { mapMutations } from 'vuex'
 import { User, register, login } from '@/api/user'
 
 const LoginProps = Vue.extend({
@@ -9,7 +9,9 @@ const LoginProps = Vue.extend({
   }
 })
 
-@Component
+@Component({
+  methods: mapMutations(['setUser'])
+})
 export default class Login extends LoginProps {
   user = {
     username: '',
@@ -21,7 +23,7 @@ export default class Login extends LoginProps {
   } = {}
   disabledSign = false
 
-  @Mutation('setUser') setUser: (payload: User) => void
+  setUser!: (payload: User) => void
 
   async onSubmit (e: Event) {
     e.preventDefault()
@@ -59,17 +61,11 @@ export default class Login extends LoginProps {
               <ul class="error-messages">
                 {
                   Object.keys(errors).map(field => (
-                    <template>
-                      {
-                        errors[field].map((message, index) => (
-                          <li key={index}>
-                            {{field}} {{message}}
-                          </li>)
-                        )
-                      }
-                    </template>
+                    errors[field].map((message, index) => (
+                      <li key={index}>{field} { message }</li>
+                    ))
                   ))
-              }
+                }
               </ul>
 
               <form onSubmit = { this.onSubmit }>

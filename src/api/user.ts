@@ -1,7 +1,7 @@
 import { request } from '@/utils/request'
 import { AxiosPromise } from 'axios'
 
-export interface UserParams {
+interface UserData {
   user: {
     username?: string
     email: string
@@ -24,7 +24,7 @@ export interface UserResponse {
 }
 
 // 用户注册
-export const register = (data: UserParams): AxiosPromise<UserResponse> => {
+export const register = (data: UserData): AxiosPromise<UserResponse> => {
   return request({
     method: 'post',
     url: '/api/users',
@@ -33,7 +33,7 @@ export const register = (data: UserParams): AxiosPromise<UserResponse> => {
 }
 
 // 用户登录
-export const login = (data: UserParams): AxiosPromise<UserResponse> => {
+export const login = (data: UserData): AxiosPromise<UserResponse> => {
   return request({
     method: 'post',
     url: '/api/users/login',

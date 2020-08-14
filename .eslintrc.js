@@ -19,6 +19,8 @@ module.exports = {
     'lines-between-class-members': 'off',
     semi: 'off',
     'object-curly-spacing': 'off',
-    indent: 'off'
+    indent: 'off',
+    'array-bracket-spacing': 'off',
+    'comma-dangle': 'off'
   }
 }
