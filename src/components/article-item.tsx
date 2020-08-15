@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import {
-  ArticleDetail
+  ArticleDetail,
+  favoriteArticle,
+  unFavoriteArticle
 } from '@/api/article'
 
 const ArticleItemProps = Vue.extend({
@@ -26,11 +28,22 @@ export default class ArticleItem extends ArticleItemProps {
   isLogin!: boolean
   disabledFavorite = false
 
-  likeHandler (article: ArticleDetail) {
-    console.log(article)
+  async likeHandler (article: ArticleDetail) {
     if (!this.isLogin) {
       this.$router.push('/register')
+      return
     }
+    this.disabledFavorite = true
+    if (article.favorited) {
+      await unFavoriteArticle(article.slug)
+      article.favorited = false
+      article.favoritesCount--
+    } else {
+      await favoriteArticle(article.slug)
+      article.favorited = true
+      article.favoritesCount++
+    }
+    this.disabledFavorite = false
   }
 
   render () {

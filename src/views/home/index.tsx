@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import { Watch } from 'vue-property-decorator'
 import { mapState } from 'vuex'
 import { User } from '@/api/user'
 import {
@@ -26,8 +27,19 @@ export default class Home extends Vue {
   tags: string[] = []
   user!: User
 
-  async mounted () {
+  mounted () {
+    this.getArticlesHandler()
+  }
+
+  @Watch('$route.query', { immediate: true, deep: true })
+  onQueryChange () {
+    this.getArticlesHandler()
+  }
+
+  async getArticlesHandler () {
     this.page = Number.parseInt(this.$route.query.page as string) || 1
+    this.tab = this.$route.query.tab as string || 'global_feed'
+    this.tag = this.$route.query.tag as string || ''
 
     const getArticleApi = this.tab === 'your_feed' ? getFeedArticles : getArticles
     const [ articleRes, tagRes ] = await Promise.all([
