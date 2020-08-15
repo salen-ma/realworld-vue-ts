@@ -26,7 +26,27 @@ const routes: Array<RouteConfig> = [
         component: () => import(/* webpackChunkName: "register" */ '@/views/login/index.tsx'),
         props: { isLogin: false },
         meta: { noAuth: true }
-      }
+      },
+      {
+        path: '/profile/:username',
+        name: 'profile',
+        component: () => import(/* webpackChunkName: "profile" */ '@/views/profile/index.tsx'),
+      },
+      {
+        path: '/settings',
+        name: 'settings',
+        component: () => import(/* webpackChunkName: "settings" */ '@/views/settings/index.tsx'),
+      },
+      {
+        path: '/editor/:slug?',
+        name: 'editor',
+        component: () => import(/* webpackChunkName: "editor" */ '@/views/editor/index.tsx'),
+      },
+      {
+        path: '/article/:slug',
+        name: 'article',
+        component: () => import(/* webpackChunkName: "article" */ '@/views/article/index.tsx'),
+      },
     ]
   }
 ]
