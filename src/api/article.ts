@@ -1,7 +1,7 @@
 import { request } from '@/utils/request'
 import { AxiosPromise } from 'axios'
 
-interface GetArticleParams {
+export interface GetArticleParams {
   tag?: string
   author?: string
   favorited?: string
@@ -20,7 +20,7 @@ interface CreateArticleData {
   article: ArticleBody
 }
 
-interface Author {
+export interface Author {
   bio: string
   following: boolean
   image: string

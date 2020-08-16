@@ -124,11 +124,6 @@ export default class Home extends Vue {
                 </ul>
               </div>
 
-              {/* <article-item
-                v-for="article in articles"
-                :key="article.slug"
-                :article="article"
-                :isLogin="isLogin" /> */}
               {
                 articles.map(article => (
                   <article-item
