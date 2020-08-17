@@ -61,7 +61,7 @@ export default class Home extends Vue {
 
   render () {
     const { page, totalPage, tab, tag, articles, tags, user } = this
-    console.log(tags)
+
     return (
       <div class="home-page">
 
