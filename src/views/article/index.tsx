@@ -1,35 +1,56 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import MarkdownIt from 'markdown-it'
+import { mapState } from 'vuex'
+import { ArticleDetail, getArticleDetail } from '@/api/article'
+import ArticleMeta from './components/article-meta'
 
-@Component
+@Component({
+  computed: {
+    ...mapState(['user'])
+  },
+  components: {
+    ArticleMeta
+  }
+})
 export default class Article extends Vue {
+  article: ArticleDetail = {
+    author: {
+      bio: '',
+      following: false,
+      image: '',
+      username: ''
+    },
+    title: '',
+    description: '',
+    body: '',
+    tagList: [],
+    createdAt: '',
+    favorited: false,
+    favoritesCount: 0,
+    slug: '',
+    updatedAt: ''
+  }
+
+  async mounted () {
+    const { data } = await getArticleDetail(this.$route.params.slug)
+    this.article = data.article
+    const md = new MarkdownIt()
+    this.article.body = md.render(this.article.body)
+  }
+
   render () {
+    const { article } = this
+
     return (
       <div class="article-page">
 
         <div class="banner">
           <div class="container">
 
-            <h1>How to build webapps that scale</h1>
+            <h1>{ article && article.title }</h1>
 
-            <div class="article-meta">
-              <a href=""><img src="http://i.imgur.com/Qr71crq.jpg" /></a>
-              <div class="info">
-                <a href="" class="author">Eric Simons</a>
-                <span class="date">January 20th</span>
-              </div>
-              <button class="btn btn-sm btn-outline-secondary">
-                <i class="ion-plus-round"></i>
-          &nbsp;
-          Follow Eric Simons <span class="counter">(10)</span>
-              </button>
-        &nbsp;&nbsp;
-        <button class="btn btn-sm btn-outline-primary">
-                <i class="ion-heart"></i>
-          &nbsp;
-          Favorite Post <span class="counter">(29)</span>
-              </button>
-            </div>
+            <article-meta article = { article } />
 
           </div>
         </div>
@@ -37,37 +58,13 @@ export default class Article extends Vue {
         <div class="container page">
 
           <div class="row article-content">
-            <div class="col-md-12">
-              <p>
-                Web development technologies have evolved at an incredible clip over the past few years.
-        </p>
-              <h2 id="introducing-ionic">Introducing RealWorld.</h2>
-              <p>It's a great solution for learning how other frameworks work.</p>
-            </div>
+            <div class="col-md-12" domPropsInnerHTML = { article.body }></div>
           </div>
 
           <hr />
 
           <div class="article-actions">
-            <div class="article-meta">
-              <a href="profile.html"><img src="http://i.imgur.com/Qr71crq.jpg" /></a>
-              <div class="info">
-                <a href="" class="author">Eric Simons</a>
-                <span class="date">January 20th</span>
-              </div>
-
-              <button class="btn btn-sm btn-outline-secondary">
-                <i class="ion-plus-round"></i>
-          &nbsp;
-          Follow Eric Simons <span class="counter">(10)</span>
-              </button>
-        &nbsp;
-        <button class="btn btn-sm btn-outline-primary">
-                <i class="ion-heart"></i>
-          &nbsp;
-          Favorite Post <span class="counter">(29)</span>
-              </button>
-            </div>
+            <article-meta article = { article } />
           </div>
 
           <div class="row">
@@ -80,9 +77,7 @@ export default class Article extends Vue {
                 </div>
                 <div class="card-footer">
                   <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
-                  <button class="btn btn-sm btn-primary">
-                    Post Comment
-            </button>
+                  <button class="btn btn-sm btn-primary"> Post Comment </button>
                 </div>
               </form>
 
@@ -94,8 +89,8 @@ export default class Article extends Vue {
                   <a href="" class="comment-author">
                     <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
                   </a>
-            &nbsp;
-            <a href="" class="comment-author">Jacob Schmidt</a>
+                  &nbsp;
+                  <a href="" class="comment-author">Jacob Schmidt</a>
                   <span class="date-posted">Dec 29th</span>
                 </div>
               </div>
@@ -108,8 +103,8 @@ export default class Article extends Vue {
                   <a href="" class="comment-author">
                     <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
                   </a>
-            &nbsp;
-            <a href="" class="comment-author">Jacob Schmidt</a>
+                  &nbsp;
+                  <a href="" class="comment-author">Jacob Schmidt</a>
                   <span class="date-posted">Dec 29th</span>
                   <span class="mod-options">
                     <i class="ion-edit"></i>

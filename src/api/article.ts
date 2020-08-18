@@ -33,7 +33,7 @@ export interface ArticleDetail extends ArticleBody {
   favorited: boolean
   favoritesCount: number
   slug: string
-  updatedAt: string
+  updatedAt?: string
 }
 
 interface ArticleListResponse {
