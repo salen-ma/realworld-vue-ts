@@ -2972,6 +2972,11 @@ date-fns@^1.27.2:
   resolved "https://registry.npm.taobao.org/date-fns/download/date-fns-1.30.1.tgz?cache=0&sync_timestamp=1594999069362&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fdate-fns%2Fdownload%2Fdate-fns-1.30.1.tgz#2e71bf0b119153dbb4cc4e88d9ea5acfb50dc05c"
   integrity sha1-LnG/CxGRU9u0zE6I2epaz7UNwFw=
 
+dayjs@^1.8.33:
+  version "1.8.33"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.33.tgz#18bc4a2b6c1c6f4d67b4c4f2536c0b97e5b766f7"
+  integrity sha512-881TDLZCdpJFKbraWRHcUG8zfMLLX400ENf9rFZDuWc5zYMss6xifo2PhlDX0ftOmR2NRmaIY47bAa4gKQfXqw==
+
 de-indent@^1.0.2:
   version "1.0.2"
   resolved "https://registry.npm.taobao.org/de-indent/download/de-indent-1.0.2.tgz#b2038e846dc33baa5796128d0804b455b8c1e21d"

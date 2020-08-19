@@ -5,6 +5,7 @@ import {
   favoriteArticle,
   unFavoriteArticle
 } from '@/api/article'
+import { dateFormat } from '@/utils'
 
 const ArticleItemProps = Vue.extend({
   props: {
@@ -72,7 +73,7 @@ export default class ArticleItem extends ArticleItemProps {
               }}>
               { article.author.username }
             </router-link>
-            <span class="date">{ article.createdAt }</span>
+            <span class="date">{ dateFormat(article.createdAt, 'MMMM D, YYYY') }</span>
           </div>
           <button
             class={

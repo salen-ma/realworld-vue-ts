@@ -4,6 +4,7 @@ import MarkdownIt from 'markdown-it'
 import { mapState } from 'vuex'
 import { ArticleDetail, getArticleDetail } from '@/api/article'
 import ArticleMeta from './components/article-meta'
+import { User } from '@/api/user'
 
 @Component({
   computed: {
@@ -31,6 +32,7 @@ export default class Article extends Vue {
     slug: '',
     updatedAt: ''
   }
+  user!: User
 
   async mounted () {
     const { data } = await getArticleDetail(this.$route.params.slug)
@@ -40,7 +42,7 @@ export default class Article extends Vue {
   }
 
   render () {
-    const { article } = this
+    const { article, user } = this
 
     return (
       <div class="article-page">
@@ -50,7 +52,7 @@ export default class Article extends Vue {
 
             <h1>{ article && article.title }</h1>
 
-            <article-meta article = { article } />
+            <article-meta article = { article } user = { user } />
 
           </div>
         </div>
@@ -64,7 +66,7 @@ export default class Article extends Vue {
           <hr />
 
           <div class="article-actions">
-            <article-meta article = { article } />
+            <article-meta article = { article } user = { user } />
           </div>
 
           <div class="row">
