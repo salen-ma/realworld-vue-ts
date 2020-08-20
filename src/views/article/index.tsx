@@ -2,8 +2,13 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import MarkdownIt from 'markdown-it'
 import { mapState } from 'vuex'
-import { ArticleDetail, getArticleDetail } from '@/api/article'
+import {
+  ArticleDetail, getArticleDetail,
+  unFavoriteArticle, favoriteArticle
+} from '@/api/article'
+import { followUser, unFollowUser } from '@/api/profile'
 import ArticleMeta from './components/article-meta'
+import ArticleComments from './components/article-comments'
 import { User } from '@/api/user'
 
 @Component({
@@ -11,7 +16,8 @@ import { User } from '@/api/user'
     ...mapState(['user'])
   },
   components: {
-    ArticleMeta
+    ArticleMeta,
+    ArticleComments
   }
 })
 export default class Article extends Vue {
@@ -33,6 +39,8 @@ export default class Article extends Vue {
     updatedAt: ''
   }
   user!: User
+  disabledFavorite = false
+  disabledFollow = false
 
   async mounted () {
     const { data } = await getArticleDetail(this.$route.params.slug)
@@ -41,8 +49,45 @@ export default class Article extends Vue {
     this.article.body = md.render(this.article.body)
   }
 
+  // 文章点赞
+  async likeHandler () {
+    if (!this.user) {
+      this.$router.push('/register')
+      return
+    }
+    this.disabledFavorite = true
+    if (this.article.favorited) {
+      await unFavoriteArticle(this.article.slug)
+      this.article.favorited = false
+      this.article.favoritesCount--
+    } else {
+      await favoriteArticle(this.article.slug)
+      this.article.favorited = true
+      this.article.favoritesCount++
+    }
+    this.disabledFavorite = false
+  }
+
+  // 关注作者
+  async followHandler () {
+    if (!this.user) {
+      this.$router.push('/register')
+      return
+    }
+
+    this.disabledFollow = true
+    if (this.article.author.following) {
+      await unFollowUser(this.article.author.username)
+      this.article.author.following = false
+    } else {
+      await followUser(this.article.author.username)
+      this.article.author.following = true
+    }
+    this.disabledFollow = false
+  }
+
   render () {
-    const { article, user } = this
+    const { article, user, disabledFavorite, disabledFollow } = this
 
     return (
       <div class="article-page">
@@ -52,7 +97,13 @@ export default class Article extends Vue {
 
             <h1>{ article && article.title }</h1>
 
-            <article-meta article = { article } user = { user } />
+            <article-meta
+              article = { article }
+              user = { user }
+              disabledFavorite = { disabledFavorite }
+              disabledFollow = { disabledFollow }
+              likeHandler = { this.likeHandler }
+              followHandler = { this.followHandler } />
 
           </div>
         </div>
@@ -66,56 +117,20 @@ export default class Article extends Vue {
           <hr />
 
           <div class="article-actions">
-            <article-meta article = { article } user = { user } />
+            <article-meta
+              article = { article }
+              user = { user }
+              disabledFavorite = { disabledFavorite }
+              disabledFollow = { disabledFollow }
+              likeHandler = { this.likeHandler }
+              followHandler = { this.followHandler } />
           </div>
 
           <div class="row">
 
-            <div class="col-xs-12 col-md-8 offset-md-2">
-
-              <form class="card comment-form">
-                <div class="card-block">
-                  <textarea class="form-control" placeholder="Write a comment..." rows="3"></textarea>
-                </div>
-                <div class="card-footer">
-                  <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
-                  <button class="btn btn-sm btn-primary"> Post Comment </button>
-                </div>
-              </form>
-
-              <div class="card">
-                <div class="card-block">
-                  <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                </div>
-                <div class="card-footer">
-                  <a href="" class="comment-author">
-                    <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
-                  </a>
-                  &nbsp;
-                  <a href="" class="comment-author">Jacob Schmidt</a>
-                  <span class="date-posted">Dec 29th</span>
-                </div>
-              </div>
-
-              <div class="card">
-                <div class="card-block">
-                  <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                </div>
-                <div class="card-footer">
-                  <a href="" class="comment-author">
-                    <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
-                  </a>
-                  &nbsp;
-                  <a href="" class="comment-author">Jacob Schmidt</a>
-                  <span class="date-posted">Dec 29th</span>
-                  <span class="mod-options">
-                    <i class="ion-edit"></i>
-                    <i class="ion-trash-a"></i>
-                  </span>
-                </div>
-              </div>
-
-            </div>
+            <article-comments
+              article = { article }
+              user = { user } />
 
           </div>
 
