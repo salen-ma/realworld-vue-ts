@@ -49,7 +49,7 @@ interface ArticleDetailResponse {
   article: ArticleDetail
 }
 
-interface CommentDetail {
+export interface CommentDetail {
   author: Author
   body: string
   createdAt: string

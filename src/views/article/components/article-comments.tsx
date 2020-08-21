@@ -1,17 +1,11 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import { ArticleDetail } from '@/api/article'
 import { User } from '@/api/user'
+import { dateFormat } from '@/utils'
+import { CommentDetail, getComments, addComment, delComment } from '@/api/article'
 
 const ArticleCommentsProps = Vue.extend({
   props: {
-    article: {
-      type: Object,
-      required: true,
-      default: function () {
-        return {}
-      }
-    },
     user: {
       type: Object,
       required: true,
@@ -24,57 +18,94 @@ const ArticleCommentsProps = Vue.extend({
 
 @Component
 export default class ArticleComments extends ArticleCommentsProps {
-  article!: ArticleDetail
   user!: User
+  comments: CommentDetail[] = []
+  commentIpt = ''
+  disabledAdd = false
+
+  async mounted () {
+    const { data } = await getComments(this.$route.params.slug)
+    this.comments = data.comments
+  }
+
+  onInput (e: Event) {
+    this.commentIpt = (e.target as HTMLTextAreaElement).value
+  }
+
+  async addCommentHandler () {
+    if (!this.commentIpt.trim()) {
+      return
+    }
+
+    this.disabledAdd = true
+    const { data } = await addComment(
+      {
+        comment: {
+          body: this.commentIpt
+        }
+      },
+      this.$route.params.slug
+    )
+    this.comments.unshift(data.comment)
+    this.commentIpt = ''
+    this.disabledAdd = false
+  }
+
+  async delCommentHandler (id: number) {
+    await delComment(this.$route.params.slug, id)
+    this.comments = this.comments.filter(comment => comment.id !== id)
+  }
 
   render () {
-    const { user } = this
+    const { user, comments, disabledAdd, commentIpt } = this
     return (
       <div class="col-xs-12 col-md-8 offset-md-2">
 
         {user &&
           <form class="card comment-form">
             <div class="card-block">
-              <textarea class="form-control" placeholder="Write a comment..." rows="3"></textarea>
+              <textarea
+                onInput = { this.onInput }
+                class="form-control" placeholder="Write a comment..." rows="3"></textarea>
             </div>
             <div class="card-footer">
               {user.image ? <img src={ user.image } class="comment-author-img" /> : <img class="comment-author-img"/>}
-              <button class="btn btn-sm btn-primary"> Post Comment </button>
+              <button class="btn btn-sm btn-primary"
+                disabled = { disabledAdd }
+                onClick = { this.addCommentHandler } > Post Comment </button>
             </div>
           </form>
         }
 
-        <div class="card">
-          <div class="card-block">
-            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-          </div>
-          <div class="card-footer">
-            <a href="" class="comment-author">
-              <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
-            </a>
-            &nbsp;
-            <a href="" class="comment-author">Jacob Schmidt</a>
-            <span class="date-posted">Dec 29th</span>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-block">
-            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-          </div>
-          <div class="card-footer">
-            <a href="" class="comment-author">
-              <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
-            </a>
-            &nbsp;
-            <a href="" class="comment-author">Jacob Schmidt</a>
-            <span class="date-posted">Dec 29th</span>
-            <span class="mod-options">
-              <i class="ion-edit"></i>
-              <i class="ion-trash-a"></i>
-            </span>
-          </div>
-        </div>
+        {
+          comments.map(comment => (
+            <div class="card"
+              key = {comment.id}>
+              <div class="card-block">
+                <p class="card-text">{ comment.body }</p>
+              </div>
+              <div class="card-footer">
+                <a href="" class="comment-author">
+                  {
+                    comment.author.image ?
+                      <img src={ user.image } class="comment-author-img" /> :
+                      <img class="comment-author-img"/>
+                  }
+                </a>
+                &nbsp;
+                <a href="" class="comment-author">{ comment.author.username }</a>
+                <span class="date-posted">{ dateFormat(comment.createdAt, 'MMMM D, YYYY') }</span>
+                {user && comment.author.username === user.username &&
+                  <span
+                    onClick = { () => { this.delCommentHandler(comment.id) } }
+                    class="mod-options">
+                    <i class="ion-trash-a"></i>
+                  </span>
+                }
+              </div>
+            </div>)
+          )
+        }
 
       </div>
     )
