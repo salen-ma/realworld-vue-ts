@@ -3,6 +3,7 @@ import Component from 'vue-class-component'
 import { User } from '@/api/user'
 import { dateFormat } from '@/utils'
 import { CommentDetail, getComments, addComment, delComment } from '@/api/article'
+import router from '@/router'
 
 const ArticleCommentsProps = Vue.extend({
   props: {
@@ -61,7 +62,7 @@ export default class ArticleComments extends ArticleCommentsProps {
     return (
       <div class="col-xs-12 col-md-8 offset-md-2">
 
-        {user &&
+        {user ?
           <form class="card comment-form">
             <div class="card-block">
               <textarea
@@ -74,7 +75,13 @@ export default class ArticleComments extends ArticleCommentsProps {
                 disabled = { disabledAdd }
                 onClick = { this.addCommentHandler } > Post Comment </button>
             </div>
-          </form>
+          </form> :
+          <p v-else style="display: inherit;">
+            <router-link to="/login">Sign in</router-link>
+            or
+            <router-link to="/register">sign up</router-link>
+            to add comments on this article.
+          </p>
         }
 
         {
@@ -85,15 +92,27 @@ export default class ArticleComments extends ArticleCommentsProps {
                 <p class="card-text">{ comment.body }</p>
               </div>
               <div class="card-footer">
-                <a href="" class="comment-author">
+                <router-link class="comment-author"
+                  to={{
+                    name: 'profile',
+                    params: {
+                      username: comment.author.username
+                    }
+                  }}>
                   {
                     comment.author.image ?
                       <img src={ user.image } class="comment-author-img" /> :
                       <img class="comment-author-img"/>
                   }
-                </a>
+                </router-link>
                 &nbsp;
-                <a href="" class="comment-author">{ comment.author.username }</a>
+                <router-link class="comment-author"
+                  to={{
+                    name: 'profile',
+                    params: {
+                      username: comment.author.username
+                    }
+                  }}>{ comment.author.username }</router-link>
                 <span class="date-posted">{ dateFormat(comment.createdAt, 'MMMM D, YYYY') }</span>
                 {user && comment.author.username === user.username &&
                   <span
