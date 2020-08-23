@@ -1,8 +1,19 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import { ArticleDetail, getArticleDetail, createArticle, updateArticle } from '@/api/article'
 
 @Component
 export default class Editor extends Vue {
+  article: ArticleDetail = {
+    slug: '',
+    title: '',
+    description: '',
+    body: '',
+    tagList: [],
+  }
+  tagIpt = ''
+  disabledPublish = false
+
   render () {
     return (
       <div class="editor-page">

@@ -11,9 +11,9 @@ export interface GetArticleParams {
 
 interface ArticleBody {
   title: string
-  description: string
+  description?: string
   body: string
-  tagList: string[]
+  tagList?: string[]
 }
 
 interface CreateArticleData {
@@ -28,10 +28,10 @@ export interface Author {
 }
 
 export interface ArticleDetail extends ArticleBody {
-  author: Author
-  createdAt: string
-  favorited: boolean
-  favoritesCount: number
+  author?: Author
+  createdAt?: string
+  favorited?: boolean
+  favoritesCount?: number
   slug: string
   updatedAt?: string
 }

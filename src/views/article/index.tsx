@@ -29,14 +29,10 @@ export default class Article extends Vue {
       username: ''
     },
     title: '',
-    description: '',
     body: '',
-    tagList: [],
-    createdAt: '',
     favorited: false,
     favoritesCount: 0,
     slug: '',
-    updatedAt: ''
   }
   user!: User
   disabledFavorite = false

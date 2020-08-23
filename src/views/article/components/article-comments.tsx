@@ -101,7 +101,7 @@ export default class ArticleComments extends ArticleCommentsProps {
                   }}>
                   {
                     comment.author.image ?
-                      <img src={ user.image } class="comment-author-img" /> :
+                      <img src={ comment.author.image } class="comment-author-img" /> :
                       <img class="comment-author-img"/>
                   }
                 </router-link>

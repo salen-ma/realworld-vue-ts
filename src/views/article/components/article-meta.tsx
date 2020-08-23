@@ -58,11 +58,22 @@ export default class ArticleMeta extends ArticleMetaProps {
     const { article, user, disabledDelete, disabledFavorite, disabledFollow } = this
     return (
       <div class="article-meta">
-        <a href="">
+        <router-link to={{
+          name: 'profile',
+          params: {
+            username: article.author.username
+          }
+        }}>
           {article.author.image ? <img src={ article.author.image } /> : <img />}
-        </a>
+        </router-link>
         <div class="info">
-          <a href="" class="author">{ article.author.username }</a>
+          <router-link class="author"
+            to={{
+              name: 'profile',
+              params: {
+                username: article.author.username
+              }
+            }}>{ article.author.username }</router-link>
           <span class="date">{ dateFormat(article.createdAt, 'MMMM D, YYYY') }</span>
         </div>
         {user.username !== article.author.username ?
