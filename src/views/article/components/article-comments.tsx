@@ -29,10 +29,6 @@ export default class ArticleComments extends ArticleCommentsProps {
     this.comments = data.comments
   }
 
-  onInput (e: Event) {
-    this.commentIpt = (e.target as HTMLTextAreaElement).value
-  }
-
   async addCommentHandler () {
     if (!this.commentIpt.trim()) {
       return
@@ -58,7 +54,7 @@ export default class ArticleComments extends ArticleCommentsProps {
   }
 
   render () {
-    const { user, comments, disabledAdd, commentIpt } = this
+    const { user, comments, disabledAdd } = this
     return (
       <div class="col-xs-12 col-md-8 offset-md-2">
 
@@ -66,7 +62,7 @@ export default class ArticleComments extends ArticleCommentsProps {
           <form class="card comment-form">
             <div class="card-block">
               <textarea
-                onInput = { this.onInput }
+                v-model = { this.commentIpt }
                 class="form-control" placeholder="Write a comment..." rows="3"></textarea>
             </div>
             <div class="card-footer">
