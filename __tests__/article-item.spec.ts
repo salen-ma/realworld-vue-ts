@@ -7,7 +7,7 @@ localVue.use(VueRouter)
 const router = new VueRouter()
 
 describe('ArticleItem.tsx', () => {
-  test('renders props when passed', () => {
+  it('renders props when passed', () => {
     const article = {
       title: 'Testing using Cypress',
       slug: 'testing-using-cypress-ijp2iu',
@@ -34,5 +34,6 @@ describe('ArticleItem.tsx', () => {
       }
     })
     expect(wrapper.text()).toMatch(article.title)
+    expect(wrapper.find('span.date').element.innerHTML).toBe('August 24, 2020')
   })
 })
