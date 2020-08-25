@@ -36,11 +36,13 @@ const routes: Array<RouteConfig> = [
         path: '/settings',
         name: 'settings',
         component: () => import(/* webpackChunkName: "settings" */ '@/views/settings/index.tsx'),
+        meta: { requiresAuth: true }
       },
       {
         path: '/editor/:slug?',
         name: 'editor',
         component: () => import(/* webpackChunkName: "editor" */ '@/views/editor/index.tsx'),
+        meta: { requiresAuth: true }
       },
       {
         path: '/article/:slug',
